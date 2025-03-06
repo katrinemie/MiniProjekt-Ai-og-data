@@ -7,7 +7,7 @@ df = pd.read_csv(file_name)
 #5 rækker
 print("Første 5 rækker af datasættet:")
 print(df.head())
-
+#jeg spsiwer lanja
 
 print("\nInformation om datasættet:")
 print(df.info())
