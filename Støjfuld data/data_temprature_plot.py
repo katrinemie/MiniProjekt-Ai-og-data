@@ -36,11 +36,11 @@ if os.path.exists(file_path):
         # Brug dato som indeks
         df.set_index(date_col, inplace=True)
 
-        # Plot temperatur over tid
+        #plot
         plt.figure(figsize=(12,6))
         plt.plot(df.index, df[temp_col], label="Temperatur", color="tab:blue")
 
-        # Forbedret formatering
+        #Forbedret formatering
         plt.title("Temperatur over tid")
         plt.xlabel("Dato")
         plt.ylabel("Temperatur (°C)")
