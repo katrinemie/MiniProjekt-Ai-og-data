@@ -1,14 +1,14 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Indlæs data
+
 filnavn = r"Støjfuld data\DailyDelhiClimateTrain.csv"
 df = pd.read_csv(filnavn, parse_dates=["date"])
 
-# Glidende gennemsnit (7-dages vindue)
+#7 dages vindue
 df["glidende_gns"] = df["meantemp"].rolling(window=7).mean()
 
-# Plot original og glattet data
+#Plot :)
 plt.figure(figsize=(15, 6))
 plt.plot(df["date"], df["meantemp"], label="Original temperatur", alpha=0.5)
 plt.plot(df["date"], df["glidende_gns"], label="Glidende gennemsnit (7 dage)", color="red")

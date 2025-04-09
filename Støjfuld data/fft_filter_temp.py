@@ -2,39 +2,35 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Indlæs datasættet fra den angivne sti
+
 filnavn = r"Støjfuld data\DailyDelhiClimateTrain.csv"
-df = pd.read_csv(filnavn)
-df['date'] = pd.to_datetime(df['date'])
-df.set_index('date', inplace=True)
+df = pd.read_csv(filnavn, parse_dates=['date'])
 
-# Vælg temperaturkolonnen
-temp = df['meantemp'].values
-n = len(temp)
 
-# Udfør FFT
-fft_temp = np.fft.fft(temp)
-frequencies = np.fft.fftfreq(n)
+temperature = df['meantemp']
 
-# Lav en kopi til filtrering
-filtered_fft = fft_temp.copy()
+#FFT
+fft_values = np.fft.fft(temperature)
+frequencies = np.fft.fftfreq(len(temperature))
 
-# Nulstil højfrekvent støj – fx behold kun de 5% laveste frekvenser
-cutoff = int(n * 0.05)
-filtered_fft[cutoff:-cutoff] = 0
+fft_filtered = fft_values.copy()
+threshold = 0.005  #Lavere threshold 
+fft_filtered[np.abs(frequencies) > threshold] = 0
 
-# Invers FFT for at genskabe signal
-filtered_temp = np.fft.ifft(filtered_fft).real
+filtered_temp_fft = np.fft.ifft(fft_filtered).real
 
-# Plot original og filtreret temperatur
-plt.figure(figsize=(14, 6))
-plt.plot(df.index, temp, label='Original temperatur', alpha=0.5)
-plt.plot(df.index, filtered_temp, label='Filtreret temperatur (FFT)', color='green')
+
+window_size = 30  
+moving_avg = temperature.rolling(window=window_size, center=True).mean()
+
+#Plot FFT vs Moving Average
+plt.figure(figsize=(18, 7))
+plt.plot(df['date'], filtered_temp_fft, label=f'Filteret temperatur (FFT, threshold={threshold})', color='green')
+plt.plot(df['date'], moving_avg, label=f'Moving average (vindue={window_size})', color='orange')
 plt.xlabel('Dato')
 plt.ylabel('Temperatur (°C)')
-plt.title('Temperatur over tid - med frekvensbaseret filtrering (FFT)')
+plt.title('Sammenligning: FFT vs. Moving Average')
 plt.legend()
-plt.grid()
+plt.grid(True)
 plt.tight_layout()
-plt.savefig('fft_filter_resultat.png')
 plt.show()
