@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Definer stien til CSV-filen
-file_path = r"C:\Users\katri\Documents\2 semester\Ai og data\MiniProjekt-Ai-og-data\MiniProjekt-Ai-og-data\Støjfuld data\DailyDelhiClimateTrain.csv"
+file_path = r"Støjfuld data\DailyDelhiClimateTrain.csv"
 
 # Tjek om filen findes
 if os.path.exists(file_path):
