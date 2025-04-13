@@ -13,11 +13,11 @@ print("Kolonner i datasættet:", df.columns)
 if "meantemp" in df.columns:
     df = df.rename(columns={"meantemp": "temperature"})
 
-#standardafvigelsen
+#standardafvigelseen 
 std_dev = df["temperature"].std()
 print(f"Standardafvigelse: {std_dev:.2f}")
 
-#Plot histogram 
+#Plottet til histogrammet
 plt.figure(figsize=(8, 5))
 df["temperature"].hist(bins=50, color="blue", alpha=0.7)
 plt.title("Histogram over temperaturer")
