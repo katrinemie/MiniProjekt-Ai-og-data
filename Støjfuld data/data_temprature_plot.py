@@ -40,7 +40,7 @@ if os.path.exists(file_path):
         plt.figure(figsize=(12,6))
         plt.plot(df.index, df[temp_col], label="Temperatur", color="tab:blue")
 
-        #Forbedret formatering
+        
         plt.title("Temperatur over tid")
         plt.xlabel("Dato")
         plt.ylabel("Temperatur (°C)")
