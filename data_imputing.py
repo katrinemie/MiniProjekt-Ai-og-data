@@ -1,20 +1,33 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# 1. Indlæs datasættet
-df = pd.read_csv(r"medical_students_dataset_cleaned.csv")
+df = pd.read_csv("medical_students_dataset_cleaned.csv")
 
-# 2. Data Imputing - Udfyld manglende værdier
+#Tag et udsnit af data (10%) for at gøre det hurtigere
+df = df.sample(frac=0.1, random_state=42)
 
-# Numeriske kolonner → udfyld med median
-for col in df.select_dtypes(include='number').columns:
-    median = df[col].median()
-    df[col] = df[col].fillna(median)
 
-# Kategoriske kolonner → udfyld med mest almindelige værdi (mode)
-for col in df.select_dtypes(include='object').columns:
-    mode = df[col].mode()[0]
-    df[col] = df[col].fillna(mode)
 
-# 3. Gem det færdige datasæt
+#median til kolonner med skæv fordeling
+for col in ['age', 'bmi', 'heart rate', 'blood pressure']:
+    if col in df.columns:
+        df[col] = df[col].fillna(df[col].median())
+
+#mean til mere jævnt fordelte kolonner
+for col in ['height', 'weight', 'temperature', 'cholesterol']:
+    if col in df.columns:
+        df[col] = df[col].fillna(df[col].mean())
+
+#mode til kategoriske kolonner
+for col in ['gender', 'blood type', 'diabetes', 'smoking']:
+    if col in df.columns:
+        df[col] = df[col].fillna(df[col].mode()[0])
+
+#historgram over numersike kolonner
+df.select_dtypes(include='number').hist(figsize=(12, 10), bins=30, edgecolor="black")
+plt.tight_layout()
+plt.show()
+
+
 df.to_csv("medical_students_dataset_imputed.csv", index=False)
-print("✅ Manglende værdier er udfyldt og datasættet er gemt.")
